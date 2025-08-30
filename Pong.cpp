@@ -3,11 +3,11 @@
 class Ball
 {
 public:
-    int x, y;
+    float x, y;
     int speed_x, speed_y;
-    int radius;
+    float radius;
 
-    Ball(int x, int y, int speed_x, int speed_y, int radius)
+    Ball(float x, float y, int speed_x, int speed_y, float radius)
     {
         this->x = x;
         this->y = y;
@@ -40,11 +40,11 @@ public:
 class Paddle
 {
 public:
-    int x, y;
+    float x, y;
     int speed_x;
-    int width, height;
+    float width, height;
 
-    Paddle(int x, int y, int speed_x, int width, int height)
+    Paddle(float x, float y, int speed_x, float width, float height)
     {
         this->x = x;
         this->y = y;
@@ -88,11 +88,11 @@ public:
 class PaddleNPC
 {
 public:
-    int x, y;
+    float x, y;
     int speed_x;
-    int width, height;
+    float width, height;
 
-    PaddleNPC(int x, int y, int speed_x, int width, int height)
+    PaddleNPC(float x, float y, int speed_x, float width, float height)
     {
         this->x = x;
         this->y = y;
@@ -124,13 +124,13 @@ int main(int argc, char* argv[])
     const int screenWidth = 1000;
     const int screenHeight = 800;
 
-    int width = 150;
-    int height = 20;
+    float width = 150;
+    float height = 20;
     int speed = 5;
 
     Ball ball(screenWidth / 2.0, screenHeight / 2.0, speed, speed, 20);
 
-    Paddle paddle(screenWidth / 2 - (width / 2), screenHeight - height - 10, speed, width, height);
+    Paddle player(screenWidth / 2 - (width / 2), screenHeight - height - 10, speed, width, height);
 
     PaddleNPC paddle_npc(screenWidth / 2 - (width / 2), height, speed, width, height);
 
@@ -140,23 +140,37 @@ int main(int argc, char* argv[])
 
     while (WindowShouldClose() == false)
     {
-        //drawing
         BeginDrawing();
 
         // updating
         ball.updatePos();
 
-        paddle.updatePos();
+        player.updatePos();
 
         paddle_npc.Update(ball.x, ball.radius);
 
+        // Collision detection
+        if (CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius,
+                                    Rectangle{player.x, player.y, player.width, player.height}))
+        {
+            ball.speed_y *= -1;
+        }
+
+        if (CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{
+                                        paddle_npc.x, paddle_npc.y, paddle_npc.width, paddle_npc.height
+                                    }))
+        {
+            ball.speed_y *= -1;
+        }
+
+        //drawing
         ClearBackground(BLACK);
 
         //ball 
         ball.draw();
 
         //player
-        paddle.Draw();
+        player.Draw();
 
         //Npc
         paddle_npc.Draw();
