@@ -8,16 +8,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dfa57854-3ba1-4e51-846c-c030b273623d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Pong.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Pong.sln" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Pong.vcxproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Pong.vcxproj.filters" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Pong/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Pong/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pong.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Pong.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pong/x64/Debug/Pong.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/Pong/x64/Debug/Pong.ilk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pong/x64/Debug/Pong.obj" beforeDir="false" afterPath="$PROJECT_DIR$/Pong/x64/Debug/Pong.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pong/x64/Debug/Pong.tlog/Pong.write.1u.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/Pong/x64/Debug/Pong.tlog/Pong.write.1u.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pong/x64/Debug/Pong.tlog/link.read.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/Pong/x64/Debug/Pong.tlog/link.read.1.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pong/x64/Debug/vc143.idb" beforeDir="false" afterPath="$PROJECT_DIR$/Pong/x64/Debug/vc143.idb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pong/x64/Debug/vc143.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Pong/x64/Debug/vc143.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/x64/Debug/Pong.exe" beforeDir="false" afterPath="$PROJECT_DIR$/x64/Debug/Pong.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/x64/Debug/Pong.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/x64/Debug/Pong.pdb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -73,7 +81,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756551394987</updated>
-      <workItem from="1756551405469" duration="542000" />
+      <workItem from="1756551405469" duration="6733000" />
     </task>
     <servers />
   </component>
