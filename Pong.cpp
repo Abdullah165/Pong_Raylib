@@ -1,14 +1,95 @@
 #include <raylib.h>
 
-int player_movement(int playerX, int speed, int screenWidth, int playerWidth);
+class Ball
+{
+public:
+    float x, y;
+    int speed_x, speed_y;
+    int radius;
+
+    Ball(float x, float y, int speed_x, int speed_y, int radius)
+    {
+        this->x = x;
+        this->y = y;
+        this->speed_x = speed_x;
+        this->speed_y = speed_y;
+        this->radius = radius;
+    }
+
+    void updatePos()
+    {
+        x += speed_x;
+        y += speed_y;
+
+        if (x + radius >= GetScreenWidth() || x - radius <= 0)
+        {
+            speed_x *= -1;
+        }
+        if (y + radius >= GetScreenHeight() || y - radius <= 0)
+        {
+            speed_y *= -1;
+        }
+    }
+
+    void draw()
+    {
+        DrawCircle(x, y, radius,WHITE);
+    }
+};
+
+class Paddle
+{
+    public:
+    int x, y;
+    int speed_x;
+    int width, height;
+
+    Paddle(int x, int y, int speed_x, int width, int height)
+    {
+        this->x = x;
+        this->y = y;
+        this->speed_x = speed_x;
+        this->width = width;
+        this->height = height;
+    }
+
+    void Draw()
+    {
+        DrawRectangle(x, y , width, height,WHITE);
+    }
+
+    void updatePos()
+    {
+        if (IsKeyDown(KEY_LEFT))
+        {
+            if (this->x <= 0)
+            {
+                this->x += 0;
+            }
+            else
+            {
+                this->x -= speed_x;
+            }
+        }
+        else if (IsKeyDown(KEY_RIGHT))
+        {
+            if (this->x >= GetScreenWidth() - width)
+            {
+                this->x += 0;
+            }
+            else
+            {
+                this->x += speed_x;
+            }
+        }
+
+    }
+};
 
 int main(int argc, char* argv[])
 {
     const int screenWidth = 1000;
     const int screenHeight = 800;
-
-    int ballX = screenWidth / 2;
-    int ballY = screenHeight / 2;
 
     int width = 150;
     int height = 20;
@@ -20,15 +101,16 @@ int main(int argc, char* argv[])
     bool isGoingRight = true;
 
 
+    Ball ball(screenWidth / 2.0, screenHeight / 2.0, speed, speed, 20);
+
+    Paddle paddle(screenWidth / 2 - (width / 2), screenHeight - height - 10,speed,width,height);
+
     InitWindow(screenWidth, screenHeight, "Pong");
 
     SetTargetFPS(60);
 
     while (WindowShouldClose() == false)
     {
-        // player movement
-        playerX =  player_movement(playerX, speed, screenWidth, width);
-
         //NPC movement
         if (npcPosX >= (screenWidth - width))
         {
@@ -55,47 +137,28 @@ int main(int argc, char* argv[])
 
         //drawing
         BeginDrawing();
+
+        ball.updatePos();
+
+        paddle.updatePos();
+
         ClearBackground(BLACK);
 
-        DrawCircle(ballX, ballY, 20,WHITE);
+        //ball 
+        ball.draw();
 
         //player
-        DrawRectangle(playerX, screenHeight - height - 10, width, height,WHITE);
+        paddle.Draw();
 
         //Npc
         DrawRectangle(npcPosX, height - 10, width, height,WHITE);
+
+        //Line separation
+        DrawLine(0, screenHeight / 2, screenWidth, screenHeight / 2,WHITE);
 
         EndDrawing();
     }
 
     CloseWindow();
     return 0;
-}
-
-int player_movement(int playerX, int speed, int screenWidth, int playerWidth)
-{
-    if (IsKeyDown(KEY_LEFT))
-    {
-        if (playerX <= 0)
-        {
-            playerX += 0;
-        }
-        else
-        {
-            playerX -= speed;
-        }
-    }
-    else if (IsKeyDown(KEY_RIGHT))
-    {
-        if (playerX >= screenWidth - playerWidth)
-        {
-            playerX += 0;
-        }
-        else
-        {
-            playerX += speed;
-        }
-    }
-
-    return playerX;
 }
