@@ -3,11 +3,11 @@
 class Ball
 {
 public:
-    float x, y;
+    int x, y;
     int speed_x, speed_y;
     int radius;
 
-    Ball(float x, float y, int speed_x, int speed_y, int radius)
+    Ball(int x, int y, int speed_x, int speed_y, int radius)
     {
         this->x = x;
         this->y = y;
@@ -39,7 +39,7 @@ public:
 
 class Paddle
 {
-    public:
+public:
     int x, y;
     int speed_x;
     int width, height;
@@ -55,7 +55,7 @@ class Paddle
 
     void Draw()
     {
-        DrawRectangle(x, y , width, height,WHITE);
+        DrawRectangle(x, y, width, height,WHITE);
     }
 
     void updatePos()
@@ -82,7 +82,40 @@ class Paddle
                 this->x += speed_x;
             }
         }
+    }
+};
 
+class PaddleNPC
+{
+public:
+    int x, y;
+    int speed_x;
+    int width, height;
+
+    PaddleNPC(int x, int y, int speed_x, int width, int height)
+    {
+        this->x = x;
+        this->y = y;
+        this->speed_x = speed_x;
+        this->width = width;
+        this->height = height;
+    }
+
+    void Draw()
+    {
+        DrawRectangle(x, y, width, height,WHITE);
+    }
+
+    void Update(int ball_X, int radius)
+    {
+        if (x + width / 2 > ball_X + radius)
+        {
+            x -= speed_x;
+        }
+        if (x + width / 2 < ball_X + radius)
+        {
+            x += speed_x;
+        }
     }
 };
 
@@ -94,16 +127,12 @@ int main(int argc, char* argv[])
     int width = 150;
     int height = 20;
     int speed = 5;
-    int playerX = screenWidth / 2 - (width / 2);
-
-    int npcPosX = screenWidth / 2 - (width / 2);
-    bool isGoingLeft = false;
-    bool isGoingRight = true;
-
 
     Ball ball(screenWidth / 2.0, screenHeight / 2.0, speed, speed, 20);
 
-    Paddle paddle(screenWidth / 2 - (width / 2), screenHeight - height - 10,speed,width,height);
+    Paddle paddle(screenWidth / 2 - (width / 2), screenHeight - height - 10, speed, width, height);
+
+    PaddleNPC paddle_npc(screenWidth / 2 - (width / 2), height, speed, width, height);
 
     InitWindow(screenWidth, screenHeight, "Pong");
 
@@ -111,36 +140,15 @@ int main(int argc, char* argv[])
 
     while (WindowShouldClose() == false)
     {
-        //NPC movement
-        if (npcPosX >= (screenWidth - width))
-        {
-            isGoingLeft = true;
-            isGoingRight = false;
-        }
-
-        if (isGoingLeft)
-        {
-            npcPosX -= speed;
-
-            if (npcPosX <= 0)
-            {
-                isGoingLeft = false;
-                isGoingRight = true;
-            }
-        }
-
-        if (isGoingRight)
-        {
-            npcPosX += speed;
-        }
-
-
         //drawing
         BeginDrawing();
 
+        // updating
         ball.updatePos();
 
         paddle.updatePos();
+
+        paddle_npc.Update(ball.x, ball.radius);
 
         ClearBackground(BLACK);
 
@@ -151,7 +159,8 @@ int main(int argc, char* argv[])
         paddle.Draw();
 
         //Npc
-        DrawRectangle(npcPosX, height - 10, width, height,WHITE);
+        paddle_npc.Draw();
+        // DrawRectangle(npcPosX, height - 10, width, height,WHITE);
 
         //Line separation
         DrawLine(0, screenHeight / 2, screenWidth, screenHeight / 2,WHITE);
