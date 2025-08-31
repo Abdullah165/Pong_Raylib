@@ -1,4 +1,10 @@
+#include <chrono>
+#include <ostream>
 #include <raylib.h>
+#include <thread>
+
+int player_score = 0;
+int npc_score = 0;
 
 class Ball
 {
@@ -6,6 +12,8 @@ public:
     float x, y;
     int speed_x, speed_y;
     float radius;
+    float timer = 0.75f;
+    bool timerFinished = false;
 
     Ball(float x, float y, int speed_x, int speed_y, float radius)
     {
@@ -29,11 +37,51 @@ public:
         {
             speed_y *= -1;
         }
+
+
+        if (y - radius <= 0)
+        {
+            player_score += 1;
+
+            ResetPos();
+        }
+
+        if (y + radius >= GetScreenHeight())
+        {
+            npc_score += 1;
+
+            ResetPos();
+        }
+
+        if (!timerFinished)
+        {
+            timer -= GetFrameTime(); 
+            if (timer <= 0.0f)
+            {
+                timerFinished = true;
+                timer = 0.0f;
+                
+                // Perform action when timer finishes
+                speed_x = 8;
+            }
+        }
     }
 
     void draw()
     {
-        DrawCircle(x, y, radius,WHITE);
+        DrawCircle(x, y, radius,YELLOW);
+    }
+
+    void ResetPos()
+    {
+        timerFinished = false;
+        timer = 0.75f;
+        speed_x = 1;
+        x = GetScreenWidth() / 2;
+        y = GetScreenHeight() / 2;
+
+        speed_x *= 1;
+        speed_y *= 1;
     }
 };
 
@@ -106,13 +154,13 @@ public:
         DrawRectangle(x, y, width, height,WHITE);
     }
 
-    void Update(int ball_X, int radius)
+    void Update(int ball_X, int ball_Y, int radius)
     {
-        if (x + width / 2 > ball_X + radius)
+        if (x + width / 2 > ball_X + radius && ball_Y <= GetScreenHeight() / 1.1f)
         {
             x -= speed_x;
         }
-        if (x + width / 2 < ball_X + radius)
+        if (x + width / 2 < ball_X + radius && ball_Y <= GetScreenHeight() / 1.1f)
         {
             x += speed_x;
         }
@@ -126,9 +174,10 @@ int main(int argc, char* argv[])
 
     float width = 150;
     float height = 20;
-    int speed = 5;
+    int speed = 7;
+    int ball_speed = 8;
 
-    Ball ball(screenWidth / 2.0, screenHeight / 2.0, speed, speed, 20);
+    Ball ball(screenWidth / 2.0, screenHeight / 2.0, ball_speed, ball_speed, 20);
 
     Paddle player(screenWidth / 2 - (width / 2), screenHeight - height - 10, speed, width, height);
 
@@ -147,21 +196,22 @@ int main(int argc, char* argv[])
 
         player.updatePos();
 
-        paddle_npc.Update(ball.x, ball.radius);
+        paddle_npc.Update(ball.x, ball.y, ball.radius);
 
         // Collision detection
         if (CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius,
-                                    Rectangle{player.x, player.y, player.width, player.height}))
+                                    Rectangle{player.x, player.y, player.width * 1.05f, player.height * 1.2f}))
         {
             ball.speed_y *= -1;
         }
 
         if (CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{
-                                        paddle_npc.x, paddle_npc.y, paddle_npc.width, paddle_npc.height
+                                        paddle_npc.x, paddle_npc.y, paddle_npc.width * 1.1f, paddle_npc.height * 1.2f
                                     }))
         {
             ball.speed_y *= -1;
         }
+
 
         //drawing
         ClearBackground(BLACK);
@@ -174,7 +224,9 @@ int main(int argc, char* argv[])
 
         //Npc
         paddle_npc.Draw();
-        // DrawRectangle(npcPosX, height - 10, width, height,WHITE);
+
+        DrawText(TextFormat("%i", npc_score), 20, (screenHeight / 2) - 80, 50,WHITE);
+        DrawText(TextFormat("%i", player_score), 20, (screenHeight / 2) + 40, 50,WHITE);
 
         //Line separation
         DrawLine(0, screenHeight / 2, screenWidth, screenHeight / 2,WHITE);
